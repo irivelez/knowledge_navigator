@@ -1,1 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
 .env
+
+# Database
+*.db
+
+# Logs
+*.log
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+pyrightconfig.json
+
+# Project specific
+knowledge.db
+knowledge_navigator.log

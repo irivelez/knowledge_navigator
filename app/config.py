@@ -1,33 +1,40 @@
+# app/config.py
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 class Config:
-    # API Keys
-    NEWS_API_KEY = os.getenv('NEWS_API_KEY')
+    # API Configuration
+    HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY')
     
-    # Sources
-    RSS_FEEDS = os.getenv('RSS_FEEDS', '').split(',')
-    WEB_SOURCES = os.getenv('WEB_SOURCES', '').split(',')
-    
-    # Database
-    DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///./knowledge_navigator.db')
-    
-    # Content Categories
-    CATEGORIES = [
-        'AI & Technology',
-        'Future Studies',
-        'Innovation',
-        'Entrepreneurship',
+    # Topics of Interest
+    TOPICS = [
+        'AI',
+        'Machine Learning',
         'Economics',
-        'Other'
+        'Entrepreneurship',
+        'Technology',
+        'Technology Adoption'
     ]
     
-    # Model Configuration
-    MODEL_NAME = "google/gemma-2b"
-    MAX_LENGTH = 512
+    # RSS Feeds by topic
+    RSS_FEEDS = {
+        'AI & ML': [
+            'https://techcrunch.com/feed/',
+#           'https://www.technologyreview.com/feed/',
+        ],
+#        'Economics & Business': [
+#            'https://www.economist.com/finance-and-economics/rss.xml',
+#            'https://hbr.org/feed'
+#        ],
+#        'Technology': [
+#            'https://www.wired.com/feed/rss',
+#            'https://feeds.arstechnica.com/arstechnica/index/'
+#        ]
+    }
     
-    # Update Frequency (in minutes)
-    CONTENT_UPDATE_FREQUENCY = 60
+    # Learning Settings
+    SUMMARY_MAX_LENGTH = 500
+    INSIGHTS_MAX_LENGTH = 1000
+    BATCH_SIZE = 5

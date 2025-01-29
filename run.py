@@ -1,33 +1,20 @@
 # run.py
-from app.database.models import Database
+import logging
 from app.core.aggregator import ContentAggregator
 from app.core.processor import ContentProcessor
-from app.core.insights import InsightsManager
-import logging
-import sys
+from app.database.models import Database
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler('knowledge_navigator.log')
-    ]
-)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def main():
     try:
         # Initialize components
-        logger.info("Initializing components...")
-        db = Database()
-        aggregator = ContentAggregator(db)
+        aggregator = ContentAggregator()
         processor = ContentProcessor()
-        insights = InsightsManager(db)
+        db = Database()
         
-        # Fetch new articles
-        logger.info("Fetching new articles...")
+        # Fetch and process articles
         articles = aggregator.fetch_articles()
         logger.info(f"Fetched {len(articles)} new articles")
         
@@ -36,36 +23,28 @@ def main():
             return
         
         # Process articles
-        processed, failed = processor.process_batch(articles)
+        processed_articles = []
+        for article in articles:
+            processed_article, error = processor.process_article(article)
+            if error:
+                logger.error(f"Error processing article: {error}")
+                continue
+            processed_articles.append(processed_article)
         
-        # Save processed articles
-        for article in processed:
-            db.save_processed_article(article)
+        # Group articles and save
+        grouped_articles = processor.group_articles_by_topic(processed_articles)
+        for topic, group_data in grouped_articles.items():
+            if group_data and group_data['articles']:
+                for article_dict in group_data['articles']:
+                    article_dict['topic_group'] = topic
+                    db.save_processed_article(article_dict)
         
-        # Log results with concepts
-        logger.info("Processing Results:")
-        logger.info(f"Successfully processed: {len(processed)} articles")
-        logger.info(f"Failed to process: {len(failed)} articles")
-        
-        # Display sample results
-        if processed:
-            sample = processed[0]
-            logger.info("\nSample Processed Article:")
-            logger.info(f"Title: {sample.get('title', 'Unknown')}")
-            logger.info(f"Summary: {sample.get('summary', 'No summary generated')}")
-            logger.info(f"Key Concepts: {sample.get('key_concepts', 'No concepts extracted')}")
-        
-        if failed:
-            logger.warning("\nSample Failed Articles:")
-            for article, error in failed[:3]:  # Show first 3 failures
-                logger.warning(f"Article: {article.get('title', 'Unknown')}")
-                logger.warning(f"Error: {error}")
+        logger.info("Processing completed")
         
     except Exception as e:
-        logger.error(f"Application error: {str(e)}", exc_info=True)
-        raise
-    finally:
+        logger.error(f"Application error: {str(e)}")
         logger.info("Processing completed")
+        raise e
 
 if __name__ == "__main__":
     main()

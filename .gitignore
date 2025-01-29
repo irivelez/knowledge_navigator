@@ -23,3 +23,7 @@ pyrightconfig.json
 # Project specific
 knowledge.db
 knowledge_navigator.log
+
+# macOS system files
+.DS_Store
+**/.DS_Store

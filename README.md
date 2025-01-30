@@ -2,11 +2,15 @@
 
 ## Overview
 
-AI Knowledge Navigator is an intelligent news aggregation and analysis system that provides daily tech news digests with AI-powered insights. The system leverages the Hugging Face Inference API to fetch, process, and analyze tech news articles, generating summaries and deriving key insights across different technology domains.
+AI Knowledge Navigator is an intelligent news aggregation and analysis system that provides daily tech news digests with AI-powered insights. The system leverages AI models through the Hugging Face Inference API to fetch, process, and analyze tech news articles, generating summaries and deriving key insights across different technology domains.
 
 ## Features
 
-- **News Aggregation**: Fetches latest tech news from four reliable sources
+- **News Aggregation**: Fetches latest tech news from four reliable sources:
+    - TechCrunch (https://techcrunch.com/)
+    - Ars Technica (https://arstechnica.com/)
+    - MIT Technology Review (https://www.technologyreview.com/)
+    - AI News (https://www.artificialintelligence-news.com/)
 - **AI-Powered Processing**:
     - Generates concise, factual summaries using Facebook's BART model
     - Extracts key insights using Google's Gemma model
@@ -125,13 +129,3 @@ knowledge_navigator/
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- [Hugging Face](https://huggingface.co/) for providing access to state-of-the-art AI models
-- [Streamlit](https://streamlit.io/) for the awesome web framework
-- News sources: TechCrunch, Ars Technica, MIT Technology Review, and AI News

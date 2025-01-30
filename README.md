@@ -57,7 +57,7 @@ knowledge_navigator/
 
 ```
 
-## Installation
+## Setup
 
 1. **Clone the Repository**:
     
